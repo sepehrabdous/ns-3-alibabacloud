@@ -695,7 +695,6 @@ void RdmaHw::QpComplete(Ptr<RdmaQueuePair> qp) {
     }
     
   }
-  std::cout << "IN QpComplete" << std::endl;
   // This callback will log info
   // It may also delete the rxQp on the receiver
   m_qpCompleteCallback(qp);
