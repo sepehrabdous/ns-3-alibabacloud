@@ -682,7 +682,19 @@ void RdmaHw::RedistributeQp(){
 }
 
 Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp){
+
+
 	uint64_t payload_size = qp->GetBytesLeft();
+
+	// std::cout << "RdmaHw::GetNxtPacket called:" << std::endl
+    //       << "\t src=" << qp->m_src << std::endl
+    //       << "\t dst=" << qp->m_dest << std::endl
+    //       << "\t tag=" << qp->m_tag << std::endl
+    //       << "\t bytes_left=" << qp->GetBytesLeft() << std::endl
+    //       << "\t m_mtu=" << m_mtu << std::endl
+    //       << "\t payload_size(before_headers)=" << payload_size << std::endl
+    //       << "\t snd_nxt(before)=" << qp->snd_nxt << std::endl;
+
 	if ((uint64_t)m_mtu < payload_size)
 		payload_size = m_mtu;
 	Ptr<Packet> p = Create<Packet> ((uint32_t)payload_size);
@@ -717,6 +729,11 @@ Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp){
 	qp->snd_nxt += payload_size;
 	// std::cout << "current snd_nxt is: " << qp->snd_nxt << ", the window is: " << qp->m_win << std::endl;
 	qp->m_ipid++;
+
+	// std::cout << "RdmaHw::GetNxtPacket built packet:" << std::endl
+    //       << "\t packet_size(with_headers)=" << p->GetSize() << std::endl
+    //       << "\t payload_size=" << payload_size << std::endl
+    //       << "\t snd_nxt(after)=" << qp->snd_nxt << std::endl;
 
 	// return
 	return p;
